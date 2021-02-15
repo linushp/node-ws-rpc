@@ -1,0 +1,26 @@
+{
+  "name": "mq-ws-rpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linushp/node-ws-rpc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linushp/node-ws-rpc/issues"
+  },
+  "homepage": "https://github.com/linushp/node-ws-rpc#readme",
+  "dependencies": {
+    "ws": "^7.4.3",
+    "bufferutil":"^4.0.1",
+    "utf-8-validate":"^5.0.2",
+    "protobufjs": "^6.10.2",
+    "tinybus": "^1.0.3"
+  }
+}

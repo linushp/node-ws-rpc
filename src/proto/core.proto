@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+
+message RpcRequest {
+  string reqId = 1;
+  string method = 2;
+  string traceId = 3;
+  bytes payloadBytes = 4;
+  string payloadString = 5;
+  int32 sendTimeSecond = 6; //发送时间，秒
+}
+
+message RpcResponse {
+  string reqId = 1;
+  string method = 2;
+  string traceId = 3;
+  bytes payloadBytes = 4;
+  string payloadString = 5;
+  int32 sendTimeSecond = 6; //发送时间，秒
+  int32 code = 7 ; //返回的错误码
+  string message = 8 ; //返回的错误码
+}
+
