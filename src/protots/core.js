@@ -17,6 +17,7 @@ var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
  * @property {number} ERROR=500 ERROR value
  * @property {number} ERROR_NO_HANDLER=501 ERROR_NO_HANDLER value
  * @property {number} ERROR_TIMEOUT=502 ERROR_TIMEOUT value
+ * @property {number} ERROR_TOO_MANY_WAIT=503 ERROR_TOO_MANY_WAIT value
  */
 $root.RpcErrCode = (function() {
     var valuesById = {}, values = Object.create(valuesById);
@@ -24,6 +25,7 @@ $root.RpcErrCode = (function() {
     values[valuesById[500] = "ERROR"] = 500;
     values[valuesById[501] = "ERROR_NO_HANDLER"] = 501;
     values[valuesById[502] = "ERROR_TIMEOUT"] = 502;
+    values[valuesById[503] = "ERROR_TOO_MANY_WAIT"] = 503;
     return values;
 })();
 

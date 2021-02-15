@@ -4,12 +4,12 @@ const {nowSecond} = require('../src/utils');
 
 
 async function test() {
-    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 1);
+    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080");
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 100; i++) {
         const client = wsRpcClientPool.getClient("hello");
         try {
-            let resp = await client.sendRpcCall('hello', "何鲁丽的😊热");
+            let resp = client.sendRpcCall('hello', "何鲁丽的😊热");
             console.log(resp);
         } catch (e) {
             console.error(e);

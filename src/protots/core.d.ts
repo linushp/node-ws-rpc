@@ -4,7 +4,8 @@ export enum RpcErrCode {
     OK = 0,
     ERROR = 500,
     ERROR_NO_HANDLER = 501,
-    ERROR_TIMEOUT = 502
+    ERROR_TIMEOUT = 502,
+    ERROR_TOO_MANY_WAIT = 503
 }
 
 /** Represents a RpcRequest. */

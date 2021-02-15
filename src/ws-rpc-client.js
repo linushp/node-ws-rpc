@@ -7,13 +7,15 @@ class WsRpcClient {
     constructor(wsUrl) {
         this.wsUrl = wsUrl;
         this.reqBuffer = {};
+        this.reqBufferLength = 0;
         this.ws = null;
         this.openWebSocket();
         this.tryOpenTimer = 0;
         this.promiseCallbacks = {};
         this.config = {
             resendIntervalSecond: 20,//尝试重试时间间隔
-            maxResendTimes: 3 //最多尝试次数
+            maxResendTimes: 3 ,//最多尝试次数
+            maxWaitCount: 100000 //队列最大容量
         };
         setInterval(() => {
             this._tryFlushBuffer();
@@ -50,12 +52,13 @@ class WsRpcClient {
 
     _onWsMessage = (resp) => {
         delete this.reqBuffer[resp.reqId];
+        this.reqBufferLength--;
         const eventName = "req" + resp.reqId;
         const callback = this.promiseCallbacks[eventName];
         if (callback) {
             const {resolve, reject} = callback;
             delete this.promiseCallbacks[eventName];
-            // console.log("buffer length : " + Object.keys(this.reqBuffer).length)
+            console.log("buffer length : " + this.reqBufferLength)
             if (resp.code === RpcErrCode.OK) {
                 resolve(resp);
             } else {
@@ -81,6 +84,15 @@ class WsRpcClient {
     }
 
     async sendRpcCall(method, payload) {
+
+        if (this.reqBufferLength > this.config.maxWaitCount){
+            return Promise.reject({
+                code: RpcErrCode.ERROR_TOO_MANY_WAIT,
+                message: 'too many task wait'
+            });
+        }
+
+
         const reqId = uniqueId();
         const req = {
             reqId: reqId,
@@ -104,6 +116,7 @@ class WsRpcClient {
                 reject: reject
             };
             this.reqBuffer[reqId] = req;
+            this.reqBufferLength++;
             this._tryFlushBuffer();
         });
     }
