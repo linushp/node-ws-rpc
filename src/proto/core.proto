@@ -1,12 +1,6 @@
 syntax = "proto3";
 
-enum RpcErrCode{
-  OK = 0;
-  ERROR = 500;
-  ERROR_NO_HANDLER = 501;
-  ERROR_TIMEOUT = 502;
-  ERROR_TOO_MANY_WAIT = 503;
-}
+
 
 message RpcRequest {
   string reqId = 1;
@@ -29,3 +23,10 @@ message RpcResponse {
   string message = 8 ; //返回的错误码
 }
 
+enum RpcErrCode{
+  OK = 0;
+  ERROR = 500;
+  ERROR_NO_HANDLER = 501;
+  ERROR_TIMEOUT = 502;
+  ERROR_TOO_MANY_WAIT = 503;
+}

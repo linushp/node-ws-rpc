@@ -9,26 +9,6 @@ var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.ut
 // Exported root namespace
 var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
-/**
- * RpcErrCode enum.
- * @exports RpcErrCode
- * @enum {number}
- * @property {number} OK=0 OK value
- * @property {number} ERROR=500 ERROR value
- * @property {number} ERROR_NO_HANDLER=501 ERROR_NO_HANDLER value
- * @property {number} ERROR_TIMEOUT=502 ERROR_TIMEOUT value
- * @property {number} ERROR_TOO_MANY_WAIT=503 ERROR_TOO_MANY_WAIT value
- */
-$root.RpcErrCode = (function() {
-    var valuesById = {}, values = Object.create(valuesById);
-    values[valuesById[0] = "OK"] = 0;
-    values[valuesById[500] = "ERROR"] = 500;
-    values[valuesById[501] = "ERROR_NO_HANDLER"] = 501;
-    values[valuesById[502] = "ERROR_TIMEOUT"] = 502;
-    values[valuesById[503] = "ERROR_TOO_MANY_WAIT"] = 503;
-    return values;
-})();
-
 $root.RpcRequest = (function() {
 
     /**
@@ -707,6 +687,26 @@ $root.RpcResponse = (function() {
     };
 
     return RpcResponse;
+})();
+
+/**
+ * RpcErrCode enum.
+ * @exports RpcErrCode
+ * @enum {number}
+ * @property {number} OK=0 OK value
+ * @property {number} ERROR=500 ERROR value
+ * @property {number} ERROR_NO_HANDLER=501 ERROR_NO_HANDLER value
+ * @property {number} ERROR_TIMEOUT=502 ERROR_TIMEOUT value
+ * @property {number} ERROR_TOO_MANY_WAIT=503 ERROR_TOO_MANY_WAIT value
+ */
+$root.RpcErrCode = (function() {
+    var valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "OK"] = 0;
+    values[valuesById[500] = "ERROR"] = 500;
+    values[valuesById[501] = "ERROR_NO_HANDLER"] = 501;
+    values[valuesById[502] = "ERROR_TIMEOUT"] = 502;
+    values[valuesById[503] = "ERROR_TOO_MANY_WAIT"] = 503;
+    return values;
 })();
 
 module.exports = $root;

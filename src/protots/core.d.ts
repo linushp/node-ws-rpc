@@ -1,11 +1,27 @@
 import * as $protobuf from "protobufjs";
-/** RpcErrCode enum. */
-export enum RpcErrCode {
-    OK = 0,
-    ERROR = 500,
-    ERROR_NO_HANDLER = 501,
-    ERROR_TIMEOUT = 502,
-    ERROR_TOO_MANY_WAIT = 503
+/** Properties of a RpcRequest. */
+export interface IRpcRequest {
+
+    /** RpcRequest reqId */
+    reqId?: (string|null);
+
+    /** RpcRequest method */
+    method?: (string|null);
+
+    /** RpcRequest traceId */
+    traceId?: (string|null);
+
+    /** RpcRequest payloadBytes */
+    payloadBytes?: (Uint8Array|null);
+
+    /** RpcRequest payloadString */
+    payloadString?: (string|null);
+
+    /** RpcRequest sendTimeSecond */
+    sendTimeSecond?: (number|null);
+
+    /** RpcRequest sendCount */
+    sendCount?: (number|null);
 }
 
 /** Represents a RpcRequest. */
@@ -107,6 +123,34 @@ export class RpcRequest implements IRpcRequest {
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a RpcResponse. */
+export interface IRpcResponse {
+
+    /** RpcResponse reqId */
+    reqId?: (string|null);
+
+    /** RpcResponse method */
+    method?: (string|null);
+
+    /** RpcResponse traceId */
+    traceId?: (string|null);
+
+    /** RpcResponse payloadBytes */
+    payloadBytes?: (Uint8Array|null);
+
+    /** RpcResponse payloadString */
+    payloadString?: (string|null);
+
+    /** RpcResponse sendTimeSecond */
+    sendTimeSecond?: (number|null);
+
+    /** RpcResponse code */
+    code?: (number|null);
+
+    /** RpcResponse message */
+    message?: (string|null);
 }
 
 /** Represents a RpcResponse. */
@@ -211,4 +255,13 @@ export class RpcResponse implements IRpcResponse {
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
+}
+
+/** RpcErrCode enum. */
+export enum RpcErrCode {
+    OK = 0,
+    ERROR = 500,
+    ERROR_NO_HANDLER = 501,
+    ERROR_TIMEOUT = 502,
+    ERROR_TOO_MANY_WAIT = 503
 }
