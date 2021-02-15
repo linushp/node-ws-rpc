@@ -1,5 +1,11 @@
 syntax = "proto3";
 
+enum RpcErrCode{
+  OK = 0;
+  ERROR = 500;
+  ERROR_NO_HANDLER = 501;
+  ERROR_TIMEOUT = 502;
+}
 
 message RpcRequest {
   string reqId = 1;
@@ -8,6 +14,7 @@ message RpcRequest {
   bytes payloadBytes = 4;
   string payloadString = 5;
   int32 sendTimeSecond = 6; //发送时间，秒
+  int32 sendCount = 7; //尝试发送的次数
 }
 
 message RpcResponse {

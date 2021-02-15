@@ -29,7 +29,7 @@ class WsRpcClientPool {
      * @param address 服务地址，如：tcp://localhost:5555
      * @param clientCount 每个address创建多少个client连接
      */
-    createClient(serviceName, address, clientCount) {
+    createClient(serviceName, address, clientCount = 1) {
         let serviceMap = this.getClientMapByServiceName(serviceName);
         let clients = this.getClientListByAddress(serviceMap, address);
         for (let i = 0; i < clientCount; i++) {

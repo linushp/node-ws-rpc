@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const {uniqueId, nowSecond} = require("./utils");
-const {RpcResponse, RpcRequest} = require('./protots/core');
+const {RpcResponse, RpcRequest, RpcErrCode} = require('./protots/core');
 
 class WsRpcClient {
 
@@ -11,9 +11,13 @@ class WsRpcClient {
         this.openWebSocket();
         this.tryOpenTimer = 0;
         this.promiseCallbacks = {};
-        setInterval(()=>{
+        this.config = {
+            resendIntervalSecond: 20,//尝试重试时间间隔
+            maxResendTimes: 3 //最多尝试次数
+        };
+        setInterval(() => {
             this._tryFlushBuffer();
-        },1000)
+        }, 1000)
     }
 
     openWebSocket = () => {
@@ -41,6 +45,10 @@ class WsRpcClient {
 
     onWsMessage = (datas) => {
         const resp = RpcResponse.decode(datas);
+        this._onWsMessage(resp);
+    }
+
+    _onWsMessage = (resp) => {
         delete this.reqBuffer[resp.reqId];
         const eventName = "req" + resp.reqId;
         const callback = this.promiseCallbacks[eventName];
@@ -48,7 +56,7 @@ class WsRpcClient {
             const {resolve, reject} = callback;
             delete this.promiseCallbacks[eventName];
             // console.log("buffer length : " + Object.keys(this.reqBuffer).length)
-            if (resp.code === 0) {
+            if (resp.code === RpcErrCode.OK) {
                 resolve(resp);
             } else {
                 reject(resp);
@@ -77,7 +85,8 @@ class WsRpcClient {
         const req = {
             reqId: reqId,
             method: method,
-            sendTimeSecond: 0
+            sendTimeSecond: 0,
+            sendCount: 0
         };
 
         if (typeof payload === 'string') {
@@ -111,16 +120,31 @@ class WsRpcClient {
             const reqId = reqIdKeys[i];
             const reqObj = this.reqBuffer[reqId];
             if (this._isNeedSend(reqObj)) {
-                reqObj.sendTimeSecond = nowSecond();
-                const eRpc = RpcRequest.encode(reqObj);
-                const data = eRpc.finish();
-                ws?.send(data, {binary: true});
+                //超过最大尝试次数
+                if (reqObj.sendCount >= this.config.maxResendTimes) {
+                    this._onWsMessage({
+                        reqId: reqObj.reqId,
+                        method: reqObj.method,
+                        traceId: reqObj.traceId,
+                        payloadBytes: null,
+                        payloadString: '',
+                        sendTimeSecond: nowSecond(),
+                        code: RpcErrCode.ERROR_TIMEOUT,
+                        message: 'over max resend time'
+                    });
+                } else {
+                    reqObj.sendTimeSecond = nowSecond();
+                    reqObj.sendCount = reqObj.sendCount + 1;
+                    const eRpc = RpcRequest.encode(reqObj);
+                    const data = eRpc.finish();
+                    ws?.send(data, {binary: true});
+                }
             }
         }
     }
 
     _isNeedSend(reqObj) {
-        return (reqObj.sendTimeSecond + 30) < nowSecond();
+        return (reqObj.sendTimeSecond + this.config.resendIntervalSecond) < nowSecond();
     }
 
 }

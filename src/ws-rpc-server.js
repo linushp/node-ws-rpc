@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const {nowSecond} = require("./utils");
-const {RpcRequest, RpcResponse} = require('./protots/core');
+const {RpcRequest, RpcResponse, RpcErrCode} = require('./protots/core');
 
 class WsRpcServer {
     constructor(serverOptions) {
@@ -37,7 +37,7 @@ class WsRpcServer {
         rpcResponse.reqId = req.reqId;
         rpcResponse.method = req.method;
         rpcResponse.traceId = req.traceId;
-        rpcResponse.code = 0;
+        rpcResponse.code = RpcErrCode.OK;
         rpcResponse.message = "";
 
         let respPayload;
@@ -45,11 +45,11 @@ class WsRpcServer {
             try {
                 respPayload = await handler(req);
             } catch (e) {
-                rpcResponse.code = e.code || 500;
+                rpcResponse.code = e.code || RpcErrCode.ERROR;
                 rpcResponse.message = e.message;
             }
         } else {
-            rpcResponse.code = 501;
+            rpcResponse.code = RpcErrCode.ERROR_NO_HANDLER;
             rpcResponse.message = method + " handler is not found";
         }
 

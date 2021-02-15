@@ -1,24 +1,10 @@
 import * as $protobuf from "protobufjs";
-/** Properties of a RpcRequest. */
-export interface IRpcRequest {
-
-    /** RpcRequest reqId */
-    reqId?: (string|null);
-
-    /** RpcRequest method */
-    method?: (string|null);
-
-    /** RpcRequest traceId */
-    traceId?: (string|null);
-
-    /** RpcRequest payloadBytes */
-    payloadBytes?: (Uint8Array|null);
-
-    /** RpcRequest payloadString */
-    payloadString?: (string|null);
-
-    /** RpcRequest sendTimeSecond */
-    sendTimeSecond?: (number|null);
+/** RpcErrCode enum. */
+export enum RpcErrCode {
+    OK = 0,
+    ERROR = 500,
+    ERROR_NO_HANDLER = 501,
+    ERROR_TIMEOUT = 502
 }
 
 /** Represents a RpcRequest. */
@@ -47,6 +33,9 @@ export class RpcRequest implements IRpcRequest {
 
     /** RpcRequest sendTimeSecond. */
     public sendTimeSecond: number;
+
+    /** RpcRequest sendCount. */
+    public sendCount: number;
 
     /**
      * Creates a new RpcRequest instance using the specified properties.
@@ -117,34 +106,6 @@ export class RpcRequest implements IRpcRequest {
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
-}
-
-/** Properties of a RpcResponse. */
-export interface IRpcResponse {
-
-    /** RpcResponse reqId */
-    reqId?: (string|null);
-
-    /** RpcResponse method */
-    method?: (string|null);
-
-    /** RpcResponse traceId */
-    traceId?: (string|null);
-
-    /** RpcResponse payloadBytes */
-    payloadBytes?: (Uint8Array|null);
-
-    /** RpcResponse payloadString */
-    payloadString?: (string|null);
-
-    /** RpcResponse sendTimeSecond */
-    sendTimeSecond?: (number|null);
-
-    /** RpcResponse code */
-    code?: (number|null);
-
-    /** RpcResponse message */
-    message?: (string|null);
 }
 
 /** Represents a RpcResponse. */
