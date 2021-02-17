@@ -2,23 +2,31 @@ const {WsRpcClient} = require('../src/ws-rpc-client');
 const {wsRpcClientPool} = require('../src/ws-rpc-client-pool');
 const {nowSecond} = require('../src/utils');
 
+function sleepMs(ms){
+    return new Promise(function (resolve){
+        setTimeout(function (){
+            resolve()
+        },ms)
+    })
+}
 
 async function test() {
     try {
 
-        wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 100);
         const beginTime = nowSecond();
 
-        for (let i = 10000; i < (1000 * 1000 * 10); i++) {
-            const client = wsRpcClientPool.getClient("hello");
+        let client = wsRpcClientPool.getClient("hello");
+
+        for (let i = 10; i < (1000); i++) {
             try {
-                let resp = client.sendRpcCall('hello', "何鲁丽的😊热");
-                // console.log(resp);
+                let resp =  client.sendRpcCall('hello', "何鲁丽的😊热").then(function (x){
+                    console.log(x);
+                });
             } catch (e) {
                 console.error(e);
             }
         }
-        const client = wsRpcClientPool.getClient("hello");
+         client = wsRpcClientPool.getClient("hello");
         let resp = await client.sendRpcCall('hello', "何鲁丽的😊热");
         console.log(resp);
         console.log("cost : " + (nowSecond() - beginTime))
@@ -28,7 +36,19 @@ async function test() {
     }
 }
 
-test();
+
+async function test1(){
+    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 1);
+
+    await sleepMs(1000 * 2);
+
+    while (true){
+        await test();
+    }
+}
+
+
+test1();
 
 //
 // const client = new WsRpcClient("ws://127.0.0.1:8080");

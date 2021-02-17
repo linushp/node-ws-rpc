@@ -15,7 +15,7 @@ class WsRpcClient {
         this.config = {
             resendIntervalSecond: 20,//尝试重试时间间隔
             maxResendTimes: 3 ,//最多尝试次数
-            maxWaitCount: 1000 * 1000 //队列最大容量
+            maxWaitCount: 1000 * 100 //队列最大容量
         };
         setInterval(() => {
             this._tryFlushBuffer();
