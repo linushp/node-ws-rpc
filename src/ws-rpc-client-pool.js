@@ -167,5 +167,6 @@ class WsRpcClientPool {
 const wsRpcClientPool = new WsRpcClientPool();
 
 module.exports = {
+    WsRpcClientPool,
     wsRpcClientPool
 }
