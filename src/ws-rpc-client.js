@@ -8,7 +8,6 @@ class WsRpcClient {
         this.wsUrl = wsUrl;
         this.reqBuffer = {};
         this.ws = null;
-        this.openWebSocket();
         this.tryOpenTimer = 0;
         this.promiseCallbacks = {};
         this.promiseWaitCount = 0;
@@ -17,9 +16,11 @@ class WsRpcClient {
             maxResendTimes: 3 ,//最多尝试次数
             maxWaitCount: 1000 * 100 //队列最大容量
         };
+
         setInterval(() => {
             this._tryFlushBuffer();
-        }, 1000)
+        }, 1000);
+        this.openWebSocket();
     }
 
     openWebSocket = () => {
