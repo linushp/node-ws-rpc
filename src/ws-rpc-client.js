@@ -7,15 +7,15 @@ class WsRpcClient {
     constructor(wsUrl) {
         this.wsUrl = wsUrl;
         this.reqBuffer = {};
-        this.reqBufferLength = 0;
         this.ws = null;
         this.openWebSocket();
         this.tryOpenTimer = 0;
         this.promiseCallbacks = {};
+        this.promiseWaitCount = 0;
         this.config = {
             resendIntervalSecond: 20,//尝试重试时间间隔
             maxResendTimes: 3 ,//最多尝试次数
-            maxWaitCount: 100000 //队列最大容量
+            maxWaitCount: 1000 * 1000 //队列最大容量
         };
         setInterval(() => {
             this._tryFlushBuffer();
@@ -52,13 +52,14 @@ class WsRpcClient {
 
     _onWsMessage = (resp) => {
         delete this.reqBuffer[resp.reqId];
-        this.reqBufferLength--;
+       
         const eventName = "req" + resp.reqId;
         const callback = this.promiseCallbacks[eventName];
         if (callback) {
             const {resolve, reject} = callback;
             delete this.promiseCallbacks[eventName];
-            console.log("buffer length : " + this.reqBufferLength)
+            this.promiseWaitCount--;
+            // console.log("buffer length : " + this.promiseWaitCount)
             if (resp.code === RpcErrCode.OK) {
                 resolve(resp);
             } else {
@@ -85,7 +86,8 @@ class WsRpcClient {
 
     async sendRpcCall(method, payload) {
 
-        if (this.reqBufferLength > this.config.maxWaitCount){
+        if (this.promiseWaitCount > this.config.maxWaitCount){
+            console.log("too many task wait this.promiseWaitCount is " + this.promiseWaitCount)
             return Promise.reject({
                 code: RpcErrCode.ERROR_TOO_MANY_WAIT,
                 message: 'too many task wait'
@@ -111,12 +113,12 @@ class WsRpcClient {
 
 
         return new Promise((resolve, reject) => {
+            this.promiseWaitCount++;
             this.promiseCallbacks[eventName] = {
                 resolve: resolve,
                 reject: reject
             };
             this.reqBuffer[reqId] = req;
-            this.reqBufferLength++;
             this._tryFlushBuffer();
         });
     }

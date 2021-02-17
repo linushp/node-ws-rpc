@@ -7,6 +7,7 @@ class WsRpcServer {
         this._wss = new WebSocket.Server(serverOptions);
         this._initWss();
         this._reqestHandlers = {};
+        console.log("WsRpcServer init " + JSON.stringify(serverOptions))
     }
 
 
@@ -14,12 +15,14 @@ class WsRpcServer {
         const rpcServer = this;
         const wss = this._wss
         wss.on('connection', function connection(ws) {
-            ws.on('message', async function incoming(message) {
-                try {
-                    await rpcServer._handleIncomingMessage(ws, message);
-                } catch (e) {
-                    console.log(e.message);
-                }
+            ws.on('message', function incoming(message) {
+                (async function (ws, message, rpcServer) {
+                    try {
+                        await rpcServer._handleIncomingMessage(ws, message);
+                    } catch (e) {
+                        console.log(e.message);
+                    }
+                })(ws, message, rpcServer);
             });
         });
     }
