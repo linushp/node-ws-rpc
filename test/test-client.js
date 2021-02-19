@@ -50,6 +50,20 @@ async function test1(){
 
 test1();
 
+
+async function test2(){
+    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 1);
+
+    await sleepMs(1000 * 2);
+
+    let client = wsRpcClientPool.getClient("hello");
+    for (var i = 0;i < 100 * 10000;i++){
+        client.sendMessage('helloMessage',"helloMessage")
+    }
+}
+
+// test2();
+
 //
 // const client = new WsRpcClient("ws://127.0.0.1:8080");
 //

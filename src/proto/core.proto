@@ -10,6 +10,7 @@ message RpcRequest {
   string payloadString = 5;
   int32 sendTimeSecond = 6; //发送时间，秒
   int32 sendCount = 7; //尝试发送的次数
+  bool needResp = 8; //是否需要resp
 }
 
 message RpcResponse {
@@ -29,4 +30,5 @@ enum RpcErrCode{
   ERROR_NO_HANDLER = 501;
   ERROR_TIMEOUT = 502;
   ERROR_TOO_MANY_WAIT = 503;
+  ERROR_WS_NOT_OPEN = 504;
 }

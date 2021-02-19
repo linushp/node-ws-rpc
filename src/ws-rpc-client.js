@@ -13,7 +13,7 @@ class WsRpcClient {
         this.promiseWaitCount = 0;
         this.config = {
             resendIntervalSecond: 20,//尝试重试时间间隔
-            maxResendTimes: 3 ,//最多尝试次数
+            maxResendTimes: 3,//最多尝试次数
             maxWaitCount: 1000 * 100 //队列最大容量
         };
 
@@ -53,7 +53,7 @@ class WsRpcClient {
 
     _onWsMessage = (resp) => {
         delete this.reqBuffer[resp.reqId];
-       
+
         const eventName = "req" + resp.reqId;
         const callback = this.promiseCallbacks[eventName];
         if (callback) {
@@ -85,9 +85,46 @@ class WsRpcClient {
         this._tryFlushBuffer();
     }
 
-    async sendRpcCall(method, payload) {
+    /**
+     * 立即发送消息，无需回调，无需等待WS状态
+     * @param method
+     * @param payload
+     */
+    sendMessage(method, payload) {
+        this._checkWebSocketOpen();
 
-        if (this.promiseWaitCount > this.config.maxWaitCount){
+        const ws = this.ws;
+        const reqId = uniqueId();
+        const req = {
+            reqId: reqId,
+            method: method,
+            sendCount: 0,
+            needResp: false,
+            sendTimeSecond: nowSecond(),
+        };
+
+        if (typeof payload === 'string') {
+            req.payloadString = payload;
+        } else {
+            req.payloadBytes = payload;
+        }
+
+        const eRpc = RpcRequest.encode(req);
+        const data = eRpc.finish();
+        ws?.send(data, {binary: true});
+    }
+
+
+    /**
+     * Rpc调用，会有回调
+     * @param method
+     * @param payload
+     * @returns {Promise<unknown>}
+     */
+    async sendRpcCall(method, payload) {
+        this._checkWebSocketOpen();
+
+        if (this.promiseWaitCount > this.config.maxWaitCount) {
             console.log("too many task wait this.promiseWaitCount is " + this.promiseWaitCount)
             return Promise.reject({
                 code: RpcErrCode.ERROR_TOO_MANY_WAIT,
@@ -95,13 +132,13 @@ class WsRpcClient {
             });
         }
 
-
         const reqId = uniqueId();
         const req = {
             reqId: reqId,
             method: method,
             sendTimeSecond: 0,
-            sendCount: 0
+            sendCount: 0,
+            needResp: true,
         };
 
         if (typeof payload === 'string') {
@@ -163,6 +200,15 @@ class WsRpcClient {
         return (reqObj.sendTimeSecond + this.config.resendIntervalSecond) < nowSecond();
     }
 
+    _checkWebSocketOpen() {
+        const ws = this.ws;
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            const error = new Error("websocket is not open");
+            error.code = RpcErrCode.ERROR_WS_NOT_OPEN;
+            error.message = "websocket is not open";
+            throw error;
+        }
+    }
 }
 
 module.exports = {

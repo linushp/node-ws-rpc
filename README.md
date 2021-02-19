@@ -1,1 +1,2 @@
-# node-ws-rpc
+# tiny-ws-rpc
+

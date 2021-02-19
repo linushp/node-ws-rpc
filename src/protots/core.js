@@ -22,6 +22,7 @@ $root.RpcRequest = (function() {
      * @property {string|null} [payloadString] RpcRequest payloadString
      * @property {number|null} [sendTimeSecond] RpcRequest sendTimeSecond
      * @property {number|null} [sendCount] RpcRequest sendCount
+     * @property {boolean|null} [needResp] RpcRequest needResp
      */
 
     /**
@@ -96,6 +97,14 @@ $root.RpcRequest = (function() {
     RpcRequest.prototype.sendCount = 0;
 
     /**
+     * RpcRequest needResp.
+     * @member {boolean} needResp
+     * @memberof RpcRequest
+     * @instance
+     */
+    RpcRequest.prototype.needResp = false;
+
+    /**
      * Creates a new RpcRequest instance using the specified properties.
      * @function create
      * @memberof RpcRequest
@@ -133,6 +142,8 @@ $root.RpcRequest = (function() {
             writer.uint32(/* id 6, wireType 0 =*/48).int32(message.sendTimeSecond);
         if (message.sendCount != null && Object.hasOwnProperty.call(message, "sendCount"))
             writer.uint32(/* id 7, wireType 0 =*/56).int32(message.sendCount);
+        if (message.needResp != null && Object.hasOwnProperty.call(message, "needResp"))
+            writer.uint32(/* id 8, wireType 0 =*/64).bool(message.needResp);
         return writer;
     };
 
@@ -187,6 +198,9 @@ $root.RpcRequest = (function() {
                 break;
             case 7:
                 message.sendCount = reader.int32();
+                break;
+            case 8:
+                message.needResp = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -244,6 +258,9 @@ $root.RpcRequest = (function() {
         if (message.sendCount != null && message.hasOwnProperty("sendCount"))
             if (!$util.isInteger(message.sendCount))
                 return "sendCount: integer expected";
+        if (message.needResp != null && message.hasOwnProperty("needResp"))
+            if (typeof message.needResp !== "boolean")
+                return "needResp: boolean expected";
         return null;
     };
 
@@ -276,6 +293,8 @@ $root.RpcRequest = (function() {
             message.sendTimeSecond = object.sendTimeSecond | 0;
         if (object.sendCount != null)
             message.sendCount = object.sendCount | 0;
+        if (object.needResp != null)
+            message.needResp = Boolean(object.needResp);
         return message;
     };
 
@@ -306,6 +325,7 @@ $root.RpcRequest = (function() {
             object.payloadString = "";
             object.sendTimeSecond = 0;
             object.sendCount = 0;
+            object.needResp = false;
         }
         if (message.reqId != null && message.hasOwnProperty("reqId"))
             object.reqId = message.reqId;
@@ -321,6 +341,8 @@ $root.RpcRequest = (function() {
             object.sendTimeSecond = message.sendTimeSecond;
         if (message.sendCount != null && message.hasOwnProperty("sendCount"))
             object.sendCount = message.sendCount;
+        if (message.needResp != null && message.hasOwnProperty("needResp"))
+            object.needResp = message.needResp;
         return object;
     };
 
@@ -698,6 +720,7 @@ $root.RpcResponse = (function() {
  * @property {number} ERROR_NO_HANDLER=501 ERROR_NO_HANDLER value
  * @property {number} ERROR_TIMEOUT=502 ERROR_TIMEOUT value
  * @property {number} ERROR_TOO_MANY_WAIT=503 ERROR_TOO_MANY_WAIT value
+ * @property {number} ERROR_WS_NOT_OPEN=504 ERROR_WS_NOT_OPEN value
  */
 $root.RpcErrCode = (function() {
     var valuesById = {}, values = Object.create(valuesById);
@@ -706,6 +729,7 @@ $root.RpcErrCode = (function() {
     values[valuesById[501] = "ERROR_NO_HANDLER"] = 501;
     values[valuesById[502] = "ERROR_TIMEOUT"] = 502;
     values[valuesById[503] = "ERROR_TOO_MANY_WAIT"] = 503;
+    values[valuesById[504] = "ERROR_WS_NOT_OPEN"] = 504;
     return values;
 })();
 

@@ -63,13 +63,14 @@ class WsRpcServer {
             rpcResponse.payloadBytes = respPayload;
         }
 
-
-        const eRpc = RpcResponse.encode(rpcResponse);
-        const data = eRpc.finish();
-        if (ws && ws.readyState === 1) {
-            ws.send(data, {binary: true});
-        } else {
-            console.log("WS is closed")
+        if (req.needResp) {
+            const eRpc = RpcResponse.encode(rpcResponse);
+            const data = eRpc.finish();
+            if (ws && ws.readyState === 1) {
+                ws.send(data, {binary: true});
+            } else {
+                console.log("WS is closed")
+            }
         }
 
     }

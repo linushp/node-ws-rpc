@@ -11,6 +11,8 @@ export declare class WsRpcClient {
     public constructor(wsUrl: string);
 
     public sendRpcCall(method: string, payload: any): Promise<IRpcResponse>;
+
+    public sendMessage(method: string, payload: any);
 }
 
 export declare interface IndexMap {

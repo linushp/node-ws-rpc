@@ -22,6 +22,9 @@ export interface IRpcRequest {
 
     /** RpcRequest sendCount */
     sendCount?: (number|null);
+
+    /** RpcRequest needResp */
+    needResp?: (boolean|null);
 }
 
 /** Represents a RpcRequest. */
@@ -53,6 +56,9 @@ export class RpcRequest implements IRpcRequest {
 
     /** RpcRequest sendCount. */
     public sendCount: number;
+
+    /** RpcRequest needResp. */
+    public needResp: boolean;
 
     /**
      * Creates a new RpcRequest instance using the specified properties.
@@ -263,5 +269,6 @@ export enum RpcErrCode {
     ERROR = 500,
     ERROR_NO_HANDLER = 501,
     ERROR_TIMEOUT = 502,
-    ERROR_TOO_MANY_WAIT = 503
+    ERROR_TOO_MANY_WAIT = 503,
+    ERROR_WS_NOT_OPEN = 504
 }
