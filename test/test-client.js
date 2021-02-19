@@ -48,21 +48,21 @@ async function test1(){
 }
 
 
-test1();
+// test1();
 
 
 async function test2(){
-    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 1);
+    wsRpcClientPool.createClient("hello", "ws://127.0.0.1:8080", 4);
 
-    await sleepMs(1000 * 2);
+    await sleepMs(1000 * 5);
 
-    let client = wsRpcClientPool.getClient("hello");
     for (var i = 0;i < 100 * 10000;i++){
+        let client = wsRpcClientPool.getClient("hello");
         client.sendMessage('helloMessage',"helloMessage")
     }
 }
 
-// test2();
+test2();
 
 //
 // const client = new WsRpcClient("ws://127.0.0.1:8080");

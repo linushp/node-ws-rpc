@@ -7,7 +7,7 @@ class WsRpcServer {
         this._wss = new WebSocket.Server(serverOptions);
         this._initWss();
         this._reqestHandlers = {};
-        console.log("WsRpcServer init " + JSON.stringify(serverOptions))
+        console.log("WsRpcServer init pid: " + process.pid + " " + JSON.stringify(serverOptions))
     }
 
 
