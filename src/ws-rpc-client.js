@@ -23,6 +23,10 @@ class WsRpcClient {
         this.openWebSocket();
     }
 
+    setConfig(config){
+        Object.assign(this.config,config || {});
+    }
+
     openWebSocket = () => {
         if (this.ws) {
             this.ws.off('open', this.onWsOpen);
@@ -116,7 +120,7 @@ class WsRpcClient {
 
 
     /**
-     * Rpc调用，会有回调
+     * Rpc调用，异步回调，等待重试机制
      * @param method
      * @param payload
      * @returns {Promise<unknown>}

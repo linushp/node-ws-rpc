@@ -7,12 +7,34 @@ export declare class WsRpcServer {
     public handle(method: string, handler: (req: IRpcRequest) => {});
 }
 
+export declare interface WsRpcClientConfig {
+    resendIntervalSecond?: number;//尝试重试时间间隔
+    maxResendTimes?: number;//最多尝试次数
+    maxWaitCount?: number; //队列最大容量
+}
+
 export declare class WsRpcClient {
     public constructor(wsUrl: string);
 
+    /**
+     * Rpc调用，异步回调，等待重试机制
+     * @param method 调用方法名
+     * @param payload bytes或者string
+     */
     public sendRpcCall(method: string, payload: any): Promise<IRpcResponse>;
 
+    /**
+     * 立即发送消息，无需回调，无需等待WS状态
+     * @param method 调用方法名
+     * @param payload bytes或者string
+     */
     public sendMessage(method: string, payload: any);
+
+    /**
+     * 设置配置项
+     * @param config
+     */
+    public setConfig(config: WsRpcClientConfig);
 }
 
 export declare interface IndexMap {
