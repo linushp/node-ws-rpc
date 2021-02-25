@@ -4,7 +4,7 @@ import {IRpcRequest, IRpcResponse} from "./src/protots/core";
 export declare class WsRpcServer {
     public constructor(serverOptions: any);
 
-    public handle(method: string, handler: (req: IRpcRequest) => any);
+    public handle(method: string, handler: (req: IRpcRequest) => any):any;
 }
 
 export declare interface WsRpcClientConfig {
