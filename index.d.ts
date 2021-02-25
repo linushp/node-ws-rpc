@@ -4,7 +4,7 @@ import {IRpcRequest, IRpcResponse} from "./src/protots/core";
 export declare class WsRpcServer {
     public constructor(serverOptions: any);
 
-    public handle(method: string, handler: (req: IRpcRequest) => {});
+    public handle(method: string, handler: (req: IRpcRequest) => any);
 }
 
 export declare interface WsRpcClientConfig {
@@ -30,13 +30,13 @@ export declare class WsRpcClient {
      * @param payload bytes或者string
      * @param traceId 可选
      */
-    public sendMessage(method: string, payload: any, traceId?: string): void;
+    public sendMessage(method: string, payload: any, traceId?: string): any;
 
     /**
      * 设置配置项
      * @param config
      */
-    public setConfig(config: WsRpcClientConfig): void;
+    public setConfig(config: WsRpcClientConfig): any;
 }
 
 export declare interface IndexMap {
