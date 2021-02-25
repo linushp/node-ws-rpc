@@ -47,12 +47,13 @@ export declare interface ServiceMap {
     [key: string]: WsRpcClient[];
 }
 
+
 export declare class WsRpcClientPool {
     public constructor();
 
     public createClient(serviceName: string, address: string, clientCount?: number): void;
 
-    public getClientMapByServiceName(serviceName: string): WsRpcClient | null;
+    public getClientMapByServiceName(serviceName: string): ServiceMap;
 
     public getIndexMapByServiceName(serviceName: string): IndexMap;
 
@@ -65,6 +66,9 @@ export declare class WsRpcClientPool {
     public getClient2(serviceName: string, objectKey: any): WsRpcClient | null;
 
     public getClientByAddress(serviceName: string, address: string): WsRpcClient | null;
+
+    //返回address数组
+    public getAllAddressListByServiceName(serviceName): string[]
 }
 
 declare const wsRpcClientPool: WsRpcClientPool;

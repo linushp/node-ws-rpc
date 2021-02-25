@@ -158,9 +158,21 @@ class WsRpcClientPool {
         let index = this.getIndexByAddress(serviceClientIndexes, address);
         index = (index + 1) % addressClients.length;
         let client = addressClients[index];
-        serviceClientIndexes[address]= index;
+        serviceClientIndexes[address] = index;
         return client;
     }
+
+
+    getAllAddressListByServiceName(serviceName) {
+        let serviceClients = this.allClients[serviceName];
+        if (!serviceClients) {
+            console.error("serviceClients is null of " + serviceName);
+            return [];
+        }
+        return Object.keys(serviceClients);
+    }
+
+
 }
 
 
