@@ -23,8 +23,8 @@ class WsRpcClient {
         this.openWebSocket();
     }
 
-    setConfig(config){
-        Object.assign(this.config,config || {});
+    setConfig(config) {
+        Object.assign(this.config, config || {});
     }
 
     openWebSocket = () => {
@@ -93,8 +93,9 @@ class WsRpcClient {
      * 立即发送消息，无需回调，无需等待WS状态
      * @param method
      * @param payload
+     * @param traceId 可选
      */
-    sendMessage(method, payload) {
+    sendMessage(method, payload, traceId) {
         this._checkWebSocketOpen();
 
         const ws = this.ws;
@@ -104,8 +105,12 @@ class WsRpcClient {
             method: method,
             sendCount: 0,
             needResp: false,
-            sendTimeSecond: nowSecond(),
+            sendTimeSecond: nowSecond()
         };
+
+        if (traceId) {
+            req.traceId = traceId;
+        }
 
         if (typeof payload === 'string') {
             req.payloadString = payload;
@@ -123,9 +128,10 @@ class WsRpcClient {
      * Rpc调用，异步回调，等待重试机制
      * @param method
      * @param payload
+     * @param traceId 可选
      * @returns {Promise<unknown>}
      */
-    async sendRpcCall(method, payload) {
+    async sendRpcCall(method, payload, traceId) {
         this._checkWebSocketOpen();
 
         if (this.promiseWaitCount > this.config.maxWaitCount) {
@@ -144,6 +150,10 @@ class WsRpcClient {
             sendCount: 0,
             needResp: true,
         };
+
+        if (traceId) {
+            req.traceId = traceId;
+        }
 
         if (typeof payload === 'string') {
             req.payloadString = payload;

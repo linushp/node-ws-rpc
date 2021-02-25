@@ -48,7 +48,7 @@ async function test1(){
 }
 
 
-// test1();
+test1();
 
 
 async function test2(){
@@ -62,7 +62,7 @@ async function test2(){
     }
 }
 
-test2();
+// test2();
 
 //
 // const client = new WsRpcClient("ws://127.0.0.1:8080");

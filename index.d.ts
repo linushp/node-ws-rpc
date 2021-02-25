@@ -20,21 +20,23 @@ export declare class WsRpcClient {
      * Rpc调用，异步回调，等待重试机制
      * @param method 调用方法名
      * @param payload bytes或者string
+     * @param traceId 可选
      */
-    public sendRpcCall(method: string, payload: any): Promise<IRpcResponse>;
+    public sendRpcCall(method: string, payload: any, traceId?: string): Promise<IRpcResponse>;
 
     /**
      * 立即发送消息，无需回调，无需等待WS状态
      * @param method 调用方法名
      * @param payload bytes或者string
+     * @param traceId 可选
      */
-    public sendMessage(method: string, payload: any);
+    public sendMessage(method: string, payload: any, traceId?: string): void;
 
     /**
      * 设置配置项
      * @param config
      */
-    public setConfig(config: WsRpcClientConfig);
+    public setConfig(config: WsRpcClientConfig): void;
 }
 
 export declare interface IndexMap {
@@ -48,7 +50,7 @@ export declare interface ServiceMap {
 export declare class WsRpcClientPool {
     public constructor();
 
-    public createClient(serviceName: string, address: string, clientCount?: number);
+    public createClient(serviceName: string, address: string, clientCount?: number): void;
 
     public getClientMapByServiceName(serviceName: string): WsRpcClient | null;
 

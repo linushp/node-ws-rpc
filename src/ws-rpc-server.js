@@ -36,6 +36,20 @@ class WsRpcServer {
         const method = req.method || "";
         const handler = this._reqestHandlers[method];
 
+        if (!req.needResp) {
+            //如果不需要返回值，简单处理一下就OK
+            if (handler) {
+                handler(req);
+            }
+        } else {
+            await this._handleNeedResp(ws, req, handler);
+        }
+    }
+
+
+    async _handleNeedResp(ws, req, handler) {
+        const method = req.method || "";
+
         const rpcResponse = {};
         rpcResponse.reqId = req.reqId;
         rpcResponse.method = req.method;
@@ -63,16 +77,14 @@ class WsRpcServer {
             rpcResponse.payloadBytes = respPayload;
         }
 
-        if (req.needResp) {
-            const eRpc = RpcResponse.encode(rpcResponse);
-            const data = eRpc.finish();
-            if (ws && ws.readyState === 1) {
-                ws.send(data, {binary: true});
-            } else {
-                console.log("WS is closed")
-            }
-        }
 
+        const eRpc = RpcResponse.encode(rpcResponse);
+        const data = eRpc.finish();
+        if (ws && ws.readyState === 1) {
+            ws.send(data, {binary: true});
+        } else {
+            console.log("WS is closed")
+        }
     }
 
 }
