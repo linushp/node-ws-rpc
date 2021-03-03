@@ -68,7 +68,7 @@ export declare class WsRpcClientPool {
     public getClientByAddress(serviceName: string, address: string): WsRpcClient | null;
 
     //返回address数组
-    public getAllAddressListByServiceName(serviceName): string[]
+    public getAllAddressListByServiceName(serviceName:string): string[]
 }
 
 declare const wsRpcClientPool: WsRpcClientPool;
