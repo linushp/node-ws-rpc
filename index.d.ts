@@ -1,5 +1,10 @@
-import {IRpcRequest, IRpcResponse} from "./src/protots/core";
+import {IRpcRequest, IRpcResponse, RpcErrCode} from "./src/protots/core";
 
+export {
+    IRpcRequest,
+    IRpcResponse,
+    RpcErrCode
+}
 
 export declare class WsRpcServer {
     public constructor(serverOptions: any);
@@ -68,7 +73,7 @@ export declare class WsRpcClientPool {
     public getClientByAddress(serviceName: string, address: string): WsRpcClient | null;
 
     //返回address数组
-    public getAllAddressListByServiceName(serviceName:string): string[]
+    public getAllAddressListByServiceName(serviceName: string): string[]
 }
 
 declare const wsRpcClientPool: WsRpcClientPool;
