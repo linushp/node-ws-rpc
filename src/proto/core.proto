@@ -11,6 +11,7 @@ message RpcRequest {
   int32 sendTimeSecond = 6; //发送时间，秒
   int32 sendCount = 7; //尝试发送的次数
   bool needResp = 8; //是否需要resp
+  int32 uid = 9; //必要时传入，用户uid，额外字段
 }
 
 message RpcResponse {
@@ -22,6 +23,7 @@ message RpcResponse {
   int32 sendTimeSecond = 6; //发送时间，秒
   int32 code = 7 ; //返回的错误码
   string message = 8 ; //返回的错误码
+  int32 uid = 9; //必要时传入，用户uid，额外字段
 }
 
 enum RpcErrCode{

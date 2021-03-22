@@ -25,6 +25,9 @@ export interface IRpcRequest {
 
     /** RpcRequest needResp */
     needResp?: (boolean|null);
+
+    /** RpcRequest uid */
+    uid?: (number|null);
 }
 
 /** Represents a RpcRequest. */
@@ -59,6 +62,9 @@ export class RpcRequest implements IRpcRequest {
 
     /** RpcRequest needResp. */
     public needResp: boolean;
+
+    /** RpcRequest uid. */
+    public uid: number;
 
     /**
      * Creates a new RpcRequest instance using the specified properties.
@@ -157,6 +163,9 @@ export interface IRpcResponse {
 
     /** RpcResponse message */
     message?: (string|null);
+
+    /** RpcResponse uid */
+    uid?: (number|null);
 }
 
 /** Represents a RpcResponse. */
@@ -191,6 +200,9 @@ export class RpcResponse implements IRpcResponse {
 
     /** RpcResponse message. */
     public message: string;
+
+    /** RpcResponse uid. */
+    public uid: number;
 
     /**
      * Creates a new RpcResponse instance using the specified properties.

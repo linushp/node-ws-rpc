@@ -52,6 +52,7 @@ class WsRpcServer {
 
         const rpcResponse = {};
         rpcResponse.reqId = req.reqId;
+        rpcResponse.uid = req.uid;
         rpcResponse.method = req.method;
         rpcResponse.traceId = req.traceId;
         rpcResponse.code = RpcErrCode.OK;

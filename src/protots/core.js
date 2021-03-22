@@ -23,6 +23,7 @@ $root.RpcRequest = (function() {
      * @property {number|null} [sendTimeSecond] RpcRequest sendTimeSecond
      * @property {number|null} [sendCount] RpcRequest sendCount
      * @property {boolean|null} [needResp] RpcRequest needResp
+     * @property {number|null} [uid] RpcRequest uid
      */
 
     /**
@@ -105,6 +106,14 @@ $root.RpcRequest = (function() {
     RpcRequest.prototype.needResp = false;
 
     /**
+     * RpcRequest uid.
+     * @member {number} uid
+     * @memberof RpcRequest
+     * @instance
+     */
+    RpcRequest.prototype.uid = 0;
+
+    /**
      * Creates a new RpcRequest instance using the specified properties.
      * @function create
      * @memberof RpcRequest
@@ -144,6 +153,8 @@ $root.RpcRequest = (function() {
             writer.uint32(/* id 7, wireType 0 =*/56).int32(message.sendCount);
         if (message.needResp != null && Object.hasOwnProperty.call(message, "needResp"))
             writer.uint32(/* id 8, wireType 0 =*/64).bool(message.needResp);
+        if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+            writer.uint32(/* id 9, wireType 0 =*/72).int32(message.uid);
         return writer;
     };
 
@@ -201,6 +212,9 @@ $root.RpcRequest = (function() {
                 break;
             case 8:
                 message.needResp = reader.bool();
+                break;
+            case 9:
+                message.uid = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -261,6 +275,9 @@ $root.RpcRequest = (function() {
         if (message.needResp != null && message.hasOwnProperty("needResp"))
             if (typeof message.needResp !== "boolean")
                 return "needResp: boolean expected";
+        if (message.uid != null && message.hasOwnProperty("uid"))
+            if (!$util.isInteger(message.uid))
+                return "uid: integer expected";
         return null;
     };
 
@@ -295,6 +312,8 @@ $root.RpcRequest = (function() {
             message.sendCount = object.sendCount | 0;
         if (object.needResp != null)
             message.needResp = Boolean(object.needResp);
+        if (object.uid != null)
+            message.uid = object.uid | 0;
         return message;
     };
 
@@ -326,6 +345,7 @@ $root.RpcRequest = (function() {
             object.sendTimeSecond = 0;
             object.sendCount = 0;
             object.needResp = false;
+            object.uid = 0;
         }
         if (message.reqId != null && message.hasOwnProperty("reqId"))
             object.reqId = message.reqId;
@@ -343,6 +363,8 @@ $root.RpcRequest = (function() {
             object.sendCount = message.sendCount;
         if (message.needResp != null && message.hasOwnProperty("needResp"))
             object.needResp = message.needResp;
+        if (message.uid != null && message.hasOwnProperty("uid"))
+            object.uid = message.uid;
         return object;
     };
 
@@ -374,6 +396,7 @@ $root.RpcResponse = (function() {
      * @property {number|null} [sendTimeSecond] RpcResponse sendTimeSecond
      * @property {number|null} [code] RpcResponse code
      * @property {string|null} [message] RpcResponse message
+     * @property {number|null} [uid] RpcResponse uid
      */
 
     /**
@@ -456,6 +479,14 @@ $root.RpcResponse = (function() {
     RpcResponse.prototype.message = "";
 
     /**
+     * RpcResponse uid.
+     * @member {number} uid
+     * @memberof RpcResponse
+     * @instance
+     */
+    RpcResponse.prototype.uid = 0;
+
+    /**
      * Creates a new RpcResponse instance using the specified properties.
      * @function create
      * @memberof RpcResponse
@@ -495,6 +526,8 @@ $root.RpcResponse = (function() {
             writer.uint32(/* id 7, wireType 0 =*/56).int32(message.code);
         if (message.message != null && Object.hasOwnProperty.call(message, "message"))
             writer.uint32(/* id 8, wireType 2 =*/66).string(message.message);
+        if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+            writer.uint32(/* id 9, wireType 0 =*/72).int32(message.uid);
         return writer;
     };
 
@@ -552,6 +585,9 @@ $root.RpcResponse = (function() {
                 break;
             case 8:
                 message.message = reader.string();
+                break;
+            case 9:
+                message.uid = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -612,6 +648,9 @@ $root.RpcResponse = (function() {
         if (message.message != null && message.hasOwnProperty("message"))
             if (!$util.isString(message.message))
                 return "message: string expected";
+        if (message.uid != null && message.hasOwnProperty("uid"))
+            if (!$util.isInteger(message.uid))
+                return "uid: integer expected";
         return null;
     };
 
@@ -646,6 +685,8 @@ $root.RpcResponse = (function() {
             message.code = object.code | 0;
         if (object.message != null)
             message.message = String(object.message);
+        if (object.uid != null)
+            message.uid = object.uid | 0;
         return message;
     };
 
@@ -677,6 +718,7 @@ $root.RpcResponse = (function() {
             object.sendTimeSecond = 0;
             object.code = 0;
             object.message = "";
+            object.uid = 0;
         }
         if (message.reqId != null && message.hasOwnProperty("reqId"))
             object.reqId = message.reqId;
@@ -694,6 +736,8 @@ $root.RpcResponse = (function() {
             object.code = message.code;
         if (message.message != null && message.hasOwnProperty("message"))
             object.message = message.message;
+        if (message.uid != null && message.hasOwnProperty("uid"))
+            object.uid = message.uid;
         return object;
     };
 
