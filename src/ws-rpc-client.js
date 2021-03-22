@@ -94,8 +94,9 @@ class WsRpcClient {
      * @param method
      * @param payload
      * @param traceId 可选
+     * @param uid 可选
      */
-    sendMessage(method, payload, traceId) {
+    sendMessage({method, payload, traceId, uid}) {
         this._checkWebSocketOpen();
 
         const ws = this.ws;
@@ -110,6 +111,10 @@ class WsRpcClient {
 
         if (traceId) {
             req.traceId = traceId;
+        }
+
+        if (uid) {
+            req.uid = uid;
         }
 
         if (typeof payload === 'string') {
@@ -128,10 +133,11 @@ class WsRpcClient {
      * Rpc调用，异步回调，等待重试机制
      * @param method
      * @param payload
+     * @param uid 可选
      * @param traceId 可选
      * @returns {Promise<unknown>}
      */
-    async sendRpcCall(method, payload, traceId) {
+    async sendRpcCall({method, payload, uid, traceId}) {
         this._checkWebSocketOpen();
 
         if (this.promiseWaitCount > this.config.maxWaitCount) {
@@ -150,6 +156,10 @@ class WsRpcClient {
             sendCount: 0,
             needResp: true,
         };
+
+        if (uid) {
+            req.uid = uid;
+        }
 
         if (traceId) {
             req.traceId = traceId;

@@ -1,6 +1,6 @@
 import {IRpcRequest, IRpcResponse, RpcErrCode} from "./src/protots/core";
 
-export {
+export  {
     IRpcRequest,
     IRpcResponse,
     RpcErrCode
@@ -18,24 +18,28 @@ export declare interface WsRpcClientConfig {
     maxWaitCount?: number; //队列最大容量
 }
 
+export declare interface RpcCallParams {
+    method: string,
+    payload: any, //bytes或者string
+    traceId?: string,
+    uid?: number
+}
+
+
 export declare class WsRpcClient {
     public constructor(wsUrl: string);
 
     /**
      * Rpc调用，异步回调，等待重试机制
-     * @param method 调用方法名
-     * @param payload bytes或者string
-     * @param traceId 可选
+     * @param params
      */
-    public sendRpcCall(method: string, payload: any, traceId?: string): Promise<IRpcResponse>;
+    public sendRpcCall(params: RpcCallParams): Promise<IRpcResponse>;
 
     /**
      * 立即发送消息，无需回调，无需等待WS状态
-     * @param method 调用方法名
-     * @param payload bytes或者string
-     * @param traceId 可选
+     * @param params
      */
-    public sendMessage(method: string, payload: any, traceId?: string): any;
+    public sendMessage(params: RpcCallParams): any;
 
     /**
      * 设置配置项
@@ -76,4 +80,4 @@ export declare class WsRpcClientPool {
     public getAllAddressListByServiceName(serviceName: string): string[]
 }
 
-declare const wsRpcClientPool: WsRpcClientPool;
+export declare const wsRpcClientPool: WsRpcClientPool;
