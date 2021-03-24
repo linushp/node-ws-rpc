@@ -56,6 +56,9 @@ export declare interface ServiceMap {
     [key: string]: WsRpcClient[];
 }
 
+export interface GroupAddressMap{
+    [key: string]: any[];
+}
 
 export declare class WsRpcClientPool {
     public constructor();
@@ -77,7 +80,18 @@ export declare class WsRpcClientPool {
     public getClientByAddress(serviceName: string, address: string): WsRpcClient | null;
 
     //返回address数组
-    public getAllAddressListByServiceName(serviceName: string): string[]
+    public getAllAddressListByServiceName(serviceName: string): string[];
+
+    /**
+     * 工具函数：
+     * 使用一致性hash算法 将Object keys 分组
+     * 方便批量处理大量数据，分组后可以批量发送
+     *
+     * @param serviceName   服务名
+     * @param objectKeyList 用来做一致性hash的对象key
+     * @return 返回的map的结构是这样的 <address,List<ObjectKey>>
+     */
+    public groupAddressOfKeys(serviceName:string, objectKeyList:any[]): GroupAddressMap;
 }
 
 export declare const wsRpcClientPool: WsRpcClientPool;

@@ -1,13 +1,23 @@
 const {ConsistentHashRouter, ConsistentRealNode} = require("./consistenthash/ConsistentHashRouter");
 const {WsRpcClient} = require('./ws-rpc-client');
 
+
+function computeIfAbsent(map, key, func) {
+    let value = map[key];
+    if (typeof value === 'undefined') {
+        value = func();
+        map[key] = value;
+    }
+    return value;
+}
+
+
 /**
  * 单线程发送消息到服务端
  * 多线程发送消息到此客户端
  * 一个Service可以是一个集群，所以一个ServiceName会有多个Address
  * 一个Address可以建立多个连接，所以一个Address会有多个Client
  */
-
 class WsRpcClientPool {
 
     constructor() {
@@ -127,12 +137,12 @@ class WsRpcClientPool {
     getClient2(serviceName, objectKey) {
         let consistentHashRouter = this.consistentHashRouterMap[serviceName];
         if (!consistentHashRouter) {
-            console.error("consistentHashRouter is null of " + serviceName);
+            console.error("[WsRpcClientPool][getClient2]consistentHashRouter is null of " + serviceName);
             return null;
         }
         let routeNode = consistentHashRouter.routeNode(objectKey);
         if (routeNode == null) {
-            console.error("routeNode is null of " + serviceName + " , " + objectKey);
+            console.error("[WsRpcClientPool][getClient2]routeNode is null of " + serviceName + " , " + objectKey);
             return null;
         }
 
@@ -144,13 +154,13 @@ class WsRpcClientPool {
     getClientByAddress(serviceName, address) {
         let serviceClients = this.allClients[serviceName];
         if (!serviceClients) {
-            console.error("serviceClients is null of " + serviceName);
+            console.error("[WsRpcClientPool][getClientByAddress]serviceClients is null of " + serviceName);
             return null;
         }
 
         let addressClients = serviceClients[address];
         if (!addressClients) {
-            console.error("addressClients is null of " + serviceName + " , " + address);
+            console.error("[WsRpcClientPool][getClientByAddress]addressClients is null of " + serviceName + " , " + address);
             return null;
         }
 
@@ -166,10 +176,34 @@ class WsRpcClientPool {
     getAllAddressListByServiceName(serviceName) {
         let serviceClients = this.allClients[serviceName];
         if (!serviceClients) {
-            console.error("serviceClients is null of " + serviceName);
+            console.error("[WsRpcClientPool][getAllAddressListByServiceName] serviceClients is null of " + serviceName);
             return [];
         }
         return Object.keys(serviceClients);
+    }
+
+    groupAddressOfKeys(serviceName, objectKeyList) {
+        let consistentHashRouter = this.consistentHashRouterMap[serviceName];
+
+        if (consistentHashRouter == null) {
+            console.error("[WsRpcClientPool][groupAddressOfKeys] consistentHashRouter is null of " + serviceName);
+            return {}
+        }
+
+        let map = {};
+
+        for (let i = 0; i < objectKeyList.length; i++) {
+            let key = objectKeyList[i];
+            const keyString = "" + key;
+
+            let routeNode = consistentHashRouter.routeNode(keyString);
+            if (routeNode != null) {
+                let address = routeNode.getNodeKey();
+                let keyArr = computeIfAbsent(map, address, () => []);
+                keyArr.add(key);
+            }
+        }
+        return map;
     }
 
 
