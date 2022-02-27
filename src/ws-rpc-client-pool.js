@@ -200,7 +200,7 @@ class WsRpcClientPool {
             if (routeNode != null) {
                 let address = routeNode.getNodeKey();
                 let keyArr = computeIfAbsent(map, address, () => []);
-                keyArr.add(key);
+                keyArr.push(key);
             }
         }
         return map;
